@@ -1,11 +1,10 @@
 package com.db.grad.javaapi.repository;
 
+import com.db.grad.javaapi.model.Books;
+import com.db.grad.javaapi.model.Security;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.db.grad.javaapi.model.Dogs;
-
 @Repository
-public interface DogsRepository extends JpaRepository<Dogs, Long>{
-
+public interface SecurityRepository extends JpaRepository<Security, Long> {
 }

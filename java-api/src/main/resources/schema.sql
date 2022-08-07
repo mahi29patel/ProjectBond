@@ -6,14 +6,16 @@ name VARCHAR(250) NOT NULL,
 age INT NOT NULL
 );
 
+DROP TABLE IF EXISTS trade;
 DROP TABLE IF EXISTS book;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS security;
 
 CREATE TABLE book (
                       Id INT PRIMARY KEY ,
                       BookName VARCHAR(250) NOT NULL
 );
 
-DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
                       Id INT PRIMARY KEY ,
@@ -23,7 +25,6 @@ CREATE TABLE users (
                       Role Varchar(50) NOT NULL
 );
 
-DROP TABLE IF EXISTS security;
 
 CREATE TABLE security (
                        Id INT PRIMARY KEY ,
@@ -37,7 +38,6 @@ CREATE TABLE security (
                        Status Varchar(20) NOT NULL
 );
 
-DROP TABLE IF EXISTS trade;
 
 CREATE TABLE trade (
                        Id INT PRIMARY KEY ,
