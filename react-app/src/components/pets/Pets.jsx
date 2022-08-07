@@ -47,23 +47,20 @@ export const Pets = () => {
 
     const customerService = new CustomerService();
 
-    useEffect(() => {
+    useEffect(async () => {
 
         debugger
-        let data1 = customerService.getCustomersLarge();
+        let data1 = await customerService.getCustomersLarge();
         setCustomers1(getCustomers(data1)); setLoading1(false);
-        initFilters2();
-
-        debugger
-        let data2 = customerService.getCustomersLarge();
-        setCustomers2(getCustomers(data2)); setLoading2(false)
         initFilters1();
+
+    
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
-    const getCustomers = (data2) => {
+    const getCustomers = (data1) => {
         debugger
-        return [...data2 || []].map(d => {
+        return [...data1 || []].map(d => {
             d.date = new Date(d.date);
             return d;
         });
@@ -81,9 +78,7 @@ export const Pets = () => {
     const clearFilter1 = () => {
         initFilters1();
     }
-    const clearFilter2 = () => {
-        initFilters2();
-    }
+   
     const onGlobalFilterChange1 = (e) => {
         const value = e.target.value;
         let _filters1 = { ...filters1 };
@@ -106,7 +101,8 @@ export const Pets = () => {
     const initFilters1 = () => {
         setFilters1({
             'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
-            'name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+            'ID': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+            'issuer': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
             'country.name': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
             'representative': { value: null, matchMode: FilterMatchMode.IN },
             'date': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
@@ -117,17 +113,7 @@ export const Pets = () => {
         });
         setGlobalFilterValue1('');
     }
-    const initFilters2 = () => {
-        setFilters2({
-            'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
-            'name': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            'country.name': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            'representative': { value: null, matchMode: FilterMatchMode.IN },
-            'status': { value: null, matchMode: FilterMatchMode.EQUALS },
-            'verified': { value: null, matchMode: FilterMatchMode.EQUALS }
-        });
-        setGlobalFilterValue2('');
-    }
+    
 
     const renderHeader1 = () => {
         return (
@@ -141,38 +127,28 @@ export const Pets = () => {
         )
     }
 
-    const renderHeader2 = () => {
-        return (
-            <div className="flex justify-content-end">
-                <span className="p-input-icon-left">
-                    <i className="pi pi-search" onClick={clearFilter2} />
-                    <InputText value={globalFilterValue2} onChange={onGlobalFilterChange2} placeholder="Keyword Search" />
-                </span>
-            </div>
-        )
-    }
 
-    const countryBodyTemplate = (rowData) => {
-        return (
-            <React.Fragment>
-                <img alt="flag" src="/images/flag/flag_placeholder.png" onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} className={`flag flag-${rowData.country.code}`} width={30} />
-                <span className="image-text">{rowData.country.name}</span>
-            </React.Fragment>
-        );
-    }
+    // const countryBodyTemplate = (rowData) => {
+    //     return (
+    //         <React.Fragment>
+    //             <img alt="flag" src="/images/flag/flag_placeholder.png" onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} className={`flag flag-${rowData.country.code}`} width={30} />
+    //             <span className="image-text">{rowData.country.name}</span>
+    //         </React.Fragment>
+    //     );
+    // }
 
-    const filterClearTemplate = (options) => {
-        return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} className="p-button-secondary"></Button>;
-    }
+    // const filterClearTemplate = (options) => {
+    //     return <Button type="button" icon="pi pi-times" onClick={options.filterClearCallback} className="p-button-secondary"></Button>;
+    // }
 
-    const filterApplyTemplate = (options) => {
-        return <Button type="button" icon="pi pi-check" onClick={options.filterApplyCallback} className="p-button-success"></Button>
-    }
-    const filterFooterTemplate = () => {
-        return <div className="px-3 pt-0 pb-3 text-center font-bold">Customized Buttons</div>;
-    }
+    // const filterApplyTemplate = (options) => {
+    //     return <Button type="button" icon="pi pi-check" onClick={options.filterApplyCallback} className="p-button-success"></Button>
+    // }
+    // const filterFooterTemplate = () => {
+    //     return <div className="px-3 pt-0 pb-3 text-center font-bold">Customized Buttons</div>;
+    // }
     const representativeBodyTemplate = (rowData) => {
-        const representative = rowData.representative;
+        const representative = rowData.issuer;
         return (
             <React.Fragment>
                 <img alt={representative.name} src={`https://www.primefaces.org/primereact/images/avatar/${representative.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} width={32} style={{ verticalAlign: 'middle' }} />
@@ -192,19 +168,28 @@ export const Pets = () => {
         );
     }
     const dateBodyTemplate = (rowData) => {
-        return formatDate(rowData.date);
+        console.log(rowData);
+        // return formatDate(rowData.maturitydate);
+        return rowData.maturitydate;
+    }
+    const idBodyTemplate = (rowData) => {
+        return rowData.id;
+    }
+
+    const nameBodyTemplate = (rowData) => {
+        return rowData.issuer;
     }
     const dateFilterTemplate = (options) => {
         return <Calendar value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" mask="99/99/9999" />
     }
     const balanceBodyTemplate = (rowData) => {
-        return formatCurrency(rowData.balance);
+        return formatCurrency(rowData.facevalue);
     }
     const balanceFilterTemplate = (options) => {
         return <InputNumber value={options.value} onChange={(e) => options.filterApplyCallback(e.value, options.index)} mode="currency" currency="USD" locale="en-US" />
     }
     const statusBodyTemplate = (rowData) => {
-        return <span className={`customer-badge status-${rowData.status}`}>{rowData.status}</span>;
+        return <span className={`customer-badge status-${rowData.type}`}>{rowData.type}</span>;
     }
     const statusFilterTemplate = (options) => {
         return <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterCallback(e.value, options.index)} itemTemplate={statusItemTemplate} placeholder="Select a Status" className="p-column-filter" showClear />;
@@ -212,44 +197,44 @@ export const Pets = () => {
     const statusItemTemplate = (option) => {
         return <span className={`customer-badge status-${option}`}>{option}</span>;
     }
-    const activityBodyTemplate = (rowData) => {
-        return <ProgressBar value={rowData.activity} showValue={false}></ProgressBar>;
-    }
-    const activityFilterTemplate = (options) => {
-        return (
-            <React.Fragment>
-                <Slider value={options.value} onChange={(e) => options.filterCallback(e.value)} range className="m-3"></Slider>
-                <div className="flex align-items-center justify-content-between px-2">
-                    <span>{options.value ? options.value[0] : 0}</span>
-                    <span>{options.value ? options.value[1] : 100}</span>
-                </div>
-            </React.Fragment>
-        )
-    }
+    // const activityBodyTemplate = (rowData) => {
+    //     return <ProgressBar value={rowData.activity} showValue={false}></ProgressBar>;
+    // }
+    // const activityFilterTemplate = (options) => {
+    //     return (
+    //         <React.Fragment>
+    //             <Slider value={options.value} onChange={(e) => options.filterCallback(e.value)} range className="m-3"></Slider>
+    //             <div className="flex align-items-center justify-content-between px-2">
+    //                 <span>{options.value ? options.value[0] : 0}</span>
+    //                 <span>{options.value ? options.value[1] : 100}</span>
+    //             </div>
+    //         </React.Fragment>
+    //     )
+    // }
     const verifiedBodyTemplate = (rowData) => {
-        return <i className={classNames('pi', { 'true-icon pi-check-circle': rowData.verified, 'false-icon pi-times-circle': !rowData.verified })}></i>;
+        return <i className={classNames('pi', { 'true-icon pi-check-circle': rowData.status, 'false-icon pi-times-circle': !rowData.status })}></i>;
     }
     const verifiedFilterTemplate = (options) => {
         return <TriStateCheckbox value={options.value} onChange={(e) => options.filterCallback(e.value)} />
     }
-    const representativeRowFilterTemplate = (options) => {
-        return <MultiSelect value={options.value} options={representatives} itemTemplate={representativesItemTemplate} onChange={(e) => options.filterApplyCallback(e.value)} optionLabel="name" placeholder="Any" className="p-column-filter" maxSelectedLabels={1} />;
-    }
+    // const representativeRowFilterTemplate = (options) => {
+    //     return <MultiSelect value={options.value} options={representatives} itemTemplate={representativesItemTemplate} onChange={(e) => options.filterApplyCallback(e.value)} optionLabel="name" placeholder="Any" className="p-column-filter" maxSelectedLabels={1} />;
+    // }
 
-    const DateRowFilterTemplate = (options) => {
-        // return <MultiSelect value={options.value} options={Date} itemTemplate={dateBodyTemplate} onChange={(e) => options.filterApplyCallback(e.value)} optionLabel="name" placeholder="Any" className="p-column-filter" maxSelectedLabels={1} />;
-        return <Calendar value={options.value} options={Date} itemTemplate={dateBodyTemplate} onChange={(e) => options.filterApplyCallback(e.value)} dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" mask="99/99/9999" />
-    }
-    const statusRowFilterTemplate = (options) => {
-        return <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterApplyCallback(e.value)} itemTemplate={statusItemTemplate} placeholder="Select a Status" className="p-column-filter" showClear />;
-    }
+    // const DateRowFilterTemplate = (options) => {
+    //     // return <MultiSelect value={options.value} options={Date} itemTemplate={dateBodyTemplate} onChange={(e) => options.filterApplyCallback(e.value)} optionLabel="name" placeholder="Any" className="p-column-filter" maxSelectedLabels={1} />;
+    //     return <Calendar value={options.value} options={Date} itemTemplate={dateBodyTemplate} onChange={(e) => options.filterApplyCallback(e.value)} dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" mask="99/99/9999" />
+    // }
+    // const statusRowFilterTemplate = (options) => {
+    //     return <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterApplyCallback(e.value)} itemTemplate={statusItemTemplate} placeholder="Select a Status" className="p-column-filter" showClear />;
+    // }
 
-    const verifiedRowFilterTemplate = (options) => {
-        return <TriStateCheckbox value={options.value} onChange={(e) => options.filterApplyCallback(e.value)} />
-    }
+    // const verifiedRowFilterTemplate = (options) => {
+    //     return <TriStateCheckbox value={options.value} onChange={(e) => options.filterApplyCallback(e.value)} />
+    // }
 
     const header1 = renderHeader1();
-    const header2 = renderHeader2();
+    // const header2 = renderHeader2();
 
     return (
         <div className="datatable-filter-demo">
@@ -259,9 +244,9 @@ export const Pets = () => {
                
                 <DataTable value={customers1} paginator className="p-datatable-customers" showGridlines rows={10} style={{width:'1650px', margin:'20px'}}
                     dataKey="id" filters={filters1} filterDisplay="menu" loading={loading1} responsiveLayout="scroll"
-                    globalFilterFields={['name', 'country.name', 'representative.name', 'balance', 'status']} header={header1} emptyMessage="No customers found.">
-                    <Column field="name" header="ID" filter filterPlaceholder="Search by ID" style={{ minWidth: '12rem' }} />
-                    <Column field="name" header="Issuer" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    globalFilterFields={['ID','issuer', 'country.name', 'representative.name', 'balance', 'status']} header={header1} emptyMessage="No customers found.">
+                    <Column header="ID" field="ID" filter filterPlaceholder="Search by ID" style={{ minWidth: '12rem' }}  body={idBodyTemplate}/>
+                    <Column header="Issuer" field="issuer" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} body={nameBodyTemplate}/>
                     <Column header="MaturityDate" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate}
                         filter filterElement={dateFilterTemplate} />
                     <Column header="Coupon" filterField="balance" dataType="numeric" style={{ minWidth: '10rem' }} body={balanceBodyTemplate} filter filterElement={balanceFilterTemplate} />

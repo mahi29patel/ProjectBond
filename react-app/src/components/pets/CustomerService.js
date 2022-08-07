@@ -1,12 +1,19 @@
 import data from './Customer-Large.json';
+
+import axios from 'axios';
 export class CustomerService {
    
     
-    getCustomersLarge() {
+    async getCustomersLarge() {
         const result = [];
-        data.map((datas) => {
-            result.push(datas)
-        });
+        await axios.get("http://localhost:8080/dashboard/securities").then(
+            res => {
+                res.data.map((datas) => {
+                    result.push(datas);
+                });
+                console.log("result", result);
+            } 
+        )
         return result;
        
     }
