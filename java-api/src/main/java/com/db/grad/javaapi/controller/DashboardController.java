@@ -29,6 +29,7 @@ public class DashboardController {
 
     //get all trades for a security
     @GetMapping("/dashboard/{securityid}/trades")
+    @CrossOrigin(origins = "http://localhost:3000")
     public List<Trade> getTradesBySecurityId(@PathVariable Integer securityid) {
         return tradeRepository.findBySecurityId(securityid);
     }

@@ -1,5 +1,5 @@
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import React, { useState } from 'react';
 import './loginStyle.css';
 import axios from 'axios';
