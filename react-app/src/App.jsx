@@ -9,19 +9,21 @@ import './App.css';
 import React from "react";
 import { Pets } from "./components/pets/Pets";
 import { HashRouter as Router, Route, Routes} from 'react-router-dom';
-import {Login} from "./components/Login/Login"
+// import {Login} from "./components/Login/Login"
 
 const App = () => {
   return (
  
-  <Router>
-    <Routes>
-        <Route exact path='/'>
-          <Pets/>
-        </Route>
-        <Route path='/login'><Login /></Route>
-        </Routes>
-        </Router>
+  // // <Router>
+  // //   <Routes>
+  // //       <Route exact path='/'>
+  //         <Pets/>
+  //       {/* </Route>
+  //       <Route path='/login'><Login /></Route>
+  //       </Routes>
+  //       </Router> */}
+
+  <Pets/>
   );
 };
 

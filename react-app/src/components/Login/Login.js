@@ -1,11 +1,7 @@
-import {
-    faFacebook,
-    faGoogle,
-    faTwitter
-} from "@fortawesome/free-brands-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from 'react';
-import '../styles/loginStyle.css';
+import './loginStyle.css';
 
 class Login extends React.Component {
     constructor(props){
@@ -39,17 +35,9 @@ class Login extends React.Component {
             <input type="email" value={this.state.username} onChange={this.handleUsernameChange} name="email" id="email" required />
             <label>Password</label>
             <input type="password" value={this.state.password} onChange={this.handlePasswordChange}  name="password" id="password" required />
-            <span>Forgot Password</span>
+            {/* <span>Forgot Password</span> */}
             <button onChange={this.handleSubmit}>Login</button>
-            <p>Or SignUp Using</p>
-            <div className="icons">
-              <a className="icon1" href="https://www.facebook.com/" target="blank"
-                ><FontAwesomeIcon icon={faTwitter} /></a>
-              <a className="icon1" href="https://twitter.com/" target="blank"
-                ><FontAwesomeIcon icon={faFacebook} /></a>
-              <a className="icon1" href="https://mail.google.com/" target="blank"
-                ><FontAwesomeIcon icon={faGoogle} /></a>
-            </div>
+            
             </form>
         </div>
         );
