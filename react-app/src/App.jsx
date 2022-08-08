@@ -10,7 +10,7 @@ const App = () => {
     <BrowserRouter>
       <Routes> 
           <Route exact path="/" element={<Login />} />  
-          <Route path="/pets" element = {<Pets />}> </Route> 
+          <Route path="/dashboard/securities" element = {<Pets />}> </Route> 
       </Routes>
     </BrowserRouter>
   );
