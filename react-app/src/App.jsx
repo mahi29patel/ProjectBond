@@ -24,7 +24,7 @@ import React from 'react';
 import { Pets } from "./components/pets/Pets";
 
 import './App.css';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+// import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
 
 function App() {

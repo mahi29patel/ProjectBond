@@ -4,9 +4,9 @@ import axios from 'axios';
 export class CustomerService {
    
     
-    async getCustomersLarge() {
+     getCustomersLarge() {
         const result = [];
-        await axios.get("http://localhost:8080/dashboard/securities").then(
+        axios.get("http://localhost:8080/dashboard/securities").then(
             res => {
                 res.data.map((datas) => {
                     result.push(datas);
