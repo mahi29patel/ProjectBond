@@ -17,7 +17,7 @@ import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
 
-
+import { ButtonAppBar } from '../header/header'
 
 
 
@@ -70,10 +70,11 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
   return (
      
       
-
+   
 
      <div className="Pets">
-      <h1 align="center">List of Securities</h1>
+        <ButtonAppBar/>
+      <h1 align="center" style={{margin: '20px 0 20px 0'}}>List of Securities</h1>
      
     
 

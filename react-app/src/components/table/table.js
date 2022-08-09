@@ -1,80 +1,129 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import React, { useState,useEffect } from 'react';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+import MaterialTable from 'material-table'
+import {Checkbox,Select,MenuItem} from '@material-ui/core'
+import {Link} from '@material-ui/core'
+import Search from '@material-ui/icons/Search'
+import axios from 'axios';
+import SaveAlt from '@material-ui/icons/SaveAlt'
+import ChevronLeft from '@material-ui/icons/ChevronLeft'
+import ChevronRight from '@material-ui/icons/ChevronRight'
+import FirstPage from '@material-ui/icons/FirstPage'
+import LastPage from '@material-ui/icons/LastPage'
+import { useParams } from 'react-router-dom';
+import Check from '@material-ui/icons/Check'
+import FilterList from '@material-ui/icons/FilterList'
+import Remove from '@material-ui/icons/Remove'
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
-export const CustomizedTables = () => {
+
+
+export const TableProfile = (props) => {
+
+  const [empList,setEmpList]=useState([]);
+  
+  
+ const [filteredData,setFilteredData]=useState([]);
+ const user1 = JSON.parse(localStorage.getItem('user'));
+ const { id } = user1.id;
+ console.log(id);
+  useEffect(() => {
+   
+    axios.get(`http://localhost:8080/profile/${id}/trades`).then(
+      res => {
+        const temp= [];
+          res.data.map((datas) => {
+              temp.push(datas);
+          });
+          setEmpList(temp);
+          console.log("result", empList);
+          setFilteredData(empList);
+          console.log(filteredData);
+      } 
+  )
+  },[]);
+
+ 
+  
+ const [filter, setFilter]=useState(true)
+ const [year,setYear]=useState('all')
+  const columns = [
+    { title: "ID", field: "id"},
+    { title: "SecurityID", field: "securityid" },
+    { title: "Book Name", field: "bookname" },
+    { title: "UserID", field: "userid" },
+    {title: "Quantity", field:"quantity"},
+    {title: "Price", field:"price"},
+    {title: "Settlement Date", field:"settlementdate"},
+    {title: "Trade Date", field:"tradedate"},
+    
+  ]
+  //"id":1,"bookid":1,"securityid":1001,"bookname":"book1","userid":102,"quantity":2,"status":"Active",
+  //"price":560.7,"buySell":1,"tradedate":"2022-08-07T18:30:00.000+00:00","settlementdate":"2022-08-07T18:30:00.000+00:00"
+  const handleChange=()=>{
+   setFilter(!filter)
+  }
+  useEffect(()=>{
+setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
+
+  },[year])
+
+  
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+     
+      
+
+
+     <div className="Pets">
+      <h1 align="center">List of Trades of Bond : {id}</h1>
+     
+    
+
+     
+     <MaterialTable
+      icons={{ 
+        Check: Check,
+            DetailPanel: ChevronRight,
+            Export: SaveAlt,
+            Filter: FilterList,
+            FirstPage: FirstPage,
+            LastPage: LastPage,
+            NextPage: ChevronRight,
+            PreviousPage: ChevronLeft,
+            Search: Search,
+            ThirdStateCheck: Remove,
+      }}
+        title="Trades"
+        data={empList}
+        columns={columns}
+        options={{
+          filtering:filter
+        }}
+        actions={[
+          {
+            icon:()=><Checkbox
+            checked={filter}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />,
+          tooltip:"Hide/Show Filter option",
+          isFreeAction:true
+          }
+          
+        ]}
+       />
+      
+       
+
+      
+    </div>
+
+    
+      
   );
 }
 
-export default CustomizedTables;
+export default TableProfile;

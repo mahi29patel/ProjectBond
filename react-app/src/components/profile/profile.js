@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import {CustomizedTables} from '../table/table';
+import {TableProfile} from '../table/table';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -16,26 +16,26 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function RowAndColumnSpacing() {
   return (
     <Box sx={{ width: '100%' }}>
-      <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid container rowSpacing={5} columnSpacing={{ xs: 2, sm: 2, md: 3 }}>
         <Grid item xs={6}>
           <Item>
-              <CustomizedTables/>
+              <TableProfile/>
 
           </Item>
         </Grid>
         <Grid item xs={6}>
           <Item>
-          <CustomizedTables/>
+          <TableProfile/>
           </Item>
         </Grid>
         <Grid item xs={6}>
           <Item>
-          <CustomizedTables/>
+          <TableProfile/>
           </Item>
         </Grid>
         <Grid item xs={6}>
           <Item>
-          <CustomizedTables/>
+          <TableProfile/>
           </Item>
         </Grid>
       </Grid>
