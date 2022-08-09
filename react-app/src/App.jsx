@@ -2,11 +2,11 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
+import CRUDTable from "./components/CRUDTable/MyCRUDTable";
 import Login from "./components/Login/Login";
 import Pets from "./components/pets/Pets";
-import Trade from "./components/trade/trade";
 import RowAndColumnSpacing from "./components/profile/profile";
-import ButtonAppBar from "./components/header/header";
+import Trade from "./components/trade/trade";
 const App = () => {
   return (
     
@@ -18,6 +18,7 @@ const App = () => {
           {/* <Route path="/pets" element = {<Pets />}> </Route>  */}
           <Route path="/trade/:id" element = {<Trade />}> </Route> 
           <Route path="/profile" element = {<RowAndColumnSpacing />}> </Route> 
+          <Route path="/crud" element = {<CRUDTable />}> </Route> 
       </Routes>
     </BrowserRouter>
   );
