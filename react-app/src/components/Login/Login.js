@@ -40,7 +40,7 @@ export const Login = () => {
     return (
         <div className="container">
             <form className="form-1" onSubmit={handleSubmit}>
-                <h1>Login</h1>
+                <h1 style={{color:'#b5fac7'}}>Login</h1>
                 <label>Email</label>
                 <input type="email" value={username} onChange={handleUsernameChange} name="email" id="email" required />
                 <label>Password</label>

@@ -1,40 +1,71 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import {useNavigate} from 'react-router-dom';
 
-export const ButtonAppBar = () => {
-  const name = JSON.parse(localStorage.getItem("user")).name;
-  let navigate = useNavigate();
+import {NavLink} from "react-router-dom";
 
-  const goToProfile = () => {
-    navigate("/profile");
-  }
+import './header.css'
 
-  const logOut = () => {
-    localStorage.removeItem("user");
-    navigate("/");
 
-  }
+
+export const ButtonAppBar = () =>{
+  const [click, setClick] = React.useState(false);
+  // const name = JSON.parse(localStorage.getItem("user")).name;
+  const handleClick = () => setClick(!click);
+  const Close = () => setClick(false);
+  
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          
-          <Typography variant="h5" component="div" sx={{ flexGrow: 4 }}>
-           TEAM 11
-          </Typography>
-          <Button style={{color:'blue', paddingRight:'30px', fontWeight: 'bold', fontSize:'20px'}} onClick={goToProfile}> Hi {name}</Button>
-          <Button style={{color:'blue', paddingRight:'30px', fontWeight: 'bold', fontSize:'20px'}} onClick={logOut}>Logout</Button>
-          
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <div>
+     <div className={click ? "main-container" : ""} onClick={()=>Close()} />
+      <nav className="navbar" onClick={(e)=>e.stopPropagation()}>
+        <div className="nav-container">
+          <NavLink exact to="/" className="nav-logo">
+            TEAM 11
+            <i className="fa fa-code"></i>
+          </NavLink>
+
+          <ul className={click ? "nav-menu active" : "nav-menu"}>
+            <li className="nav-item">
+              <NavLink
+                exact
+                to="/Dashboard/Securities"
+                activeClassName="active"
+                className="nav-links"
+                onClick={click ? handleClick : null}
+              >
+                Dashboard
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                exact
+                to="/profile"
+                activeClassName="active"
+                className="nav-links"
+                onClick={click ? handleClick : null}
+              >
+                Profile
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                exact
+                to="/"
+                activeClassName="active"
+                className="nav-links"
+                onClick={click ? localStorage.removeItem("user") : null}
+                
+              >
+                Logout
+              </NavLink>
+            </li>
+           
+          </ul>
+          <div className="nav-icon" onClick={handleClick}>
+            <i className={click ? "fa fa-times" : "fa fa-bars"}></i>
+          </div>
+        </div>
+      </nav>
+    </ div>
   );
 }
+
 export default ButtonAppBar;
