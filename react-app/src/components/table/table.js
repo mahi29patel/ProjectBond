@@ -1,7 +1,5 @@
-
-
 import React, { useState,useEffect } from 'react';
-import './Pets.css';
+
 import MaterialTable from 'material-table'
 import {Checkbox,Select,MenuItem} from '@material-ui/core'
 import {Link} from '@material-ui/core'
@@ -12,25 +10,28 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ChevronRight from '@material-ui/icons/ChevronRight'
 import FirstPage from '@material-ui/icons/FirstPage'
 import LastPage from '@material-ui/icons/LastPage'
-
+import { useParams } from 'react-router-dom';
 import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
 
-import { ButtonAppBar } from '../header/header'
 
 
 
 
-export const Pets = () => {
+
+export const TableProfile = (props) => {
 
   const [empList,setEmpList]=useState([]);
-  // const [filteredData,setFilteredData] = useState(false);
+  
   
  const [filteredData,setFilteredData]=useState([]);
+ const user1 = JSON.parse(localStorage.getItem('user'));
+ const { id } = user1.id;
+ console.log(id);
   useEffect(() => {
-    
-    axios.get("http://localhost:8080/dashboard/securities").then(
+   
+    axios.get(`http://localhost:8080/profile/${id}/trades`).then(
       res => {
         const temp= [];
           res.data.map((datas) => {
@@ -49,14 +50,18 @@ export const Pets = () => {
  const [filter, setFilter]=useState(true)
  const [year,setYear]=useState('all')
   const columns = [
-    { title: "ID", field: "id",render:rowData=><Link href={`/trade/${rowData.id}`}>{rowData.id}</Link> },
-    { title: "Issuer", field: "issuer" },
-    { title: "Maturity Date", field: "maturitydate" },
-    { title: "Coupon", field: "coupon" },
-    { title: "FaceValue", field: "facevalue" },
-    { title: "Status", field: 'status' },
-    {title: "Type", field:'type'}
+    { title: "ID", field: "id"},
+    { title: "SecurityID", field: "securityid" },
+    { title: "Book Name", field: "bookname" },
+    { title: "UserID", field: "userid" },
+    {title: "Quantity", field:"quantity"},
+    {title: "Price", field:"price"},
+    {title: "Settlement Date", field:"settlementdate"},
+    {title: "Trade Date", field:"tradedate"},
+    
   ]
+  //"id":1,"bookid":1,"securityid":1001,"bookname":"book1","userid":102,"quantity":2,"status":"Active",
+  //"price":560.7,"buySell":1,"tradedate":"2022-08-07T18:30:00.000+00:00","settlementdate":"2022-08-07T18:30:00.000+00:00"
   const handleChange=()=>{
    setFilter(!filter)
   }
@@ -70,11 +75,10 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
   return (
      
       
-   
+
 
      <div className="Pets">
-        <ButtonAppBar/>
-      <h1 align="center" style={{margin: '20px 0 20px 0'}}>List of Securities</h1>
+      <h1 align="center">List of Trades of Bond : {id}</h1>
      
     
 
@@ -92,7 +96,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
             Search: Search,
             ThirdStateCheck: Remove,
       }}
-        title="Security"
+        title="Trades"
         data={empList}
         columns={columns}
         options={{
@@ -122,5 +126,4 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
   );
 }
 
-export default Pets;
-
+export default TableProfile;

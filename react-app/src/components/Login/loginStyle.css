@@ -45,11 +45,11 @@
   
   span {
     margin: 0 2rem;
-    color: blue;
+    /* color: blue; */
     cursor: pointer;
   }
   
-  button {
+  input[type="submit"] {
     margin: 2rem;
     margin-bottom: 1.5rem;
     padding: 0.5rem;
@@ -69,42 +69,7 @@
     font-weight: bolder;
   }
   
-  .icons {
-    display: flex;  
-    /* align-items: center; */
-    justify-content: center;
-    margin-bottom: 3rem;
-    margin-top: 0.5rem;
-    /* size: 1rem; */
-  }
-  
-  .icons a {
-    text-decoration: none;
-    font-size: 1rem;
-    margin: 0.2rem;
-  }
-  
-  .icons .fa-facebook {
-    border-radius: 50%;
-    background: #5d75ab;
-    color: #fff;
-    padding: 0.5rem;
-  }
-  
-  .icons .fa-twitter {
-    border-radius: 50%;
-    background: #1da1f2;
-    color: white;
-    padding: 0.5rem;
-  }
-  
-  .icons .fa-google {
-    border-radius: 50%;
-    background: #ee5645;
-    color: #fff;
-    padding: 0.5rem;
-  }
-  
+
   /* ....///Media query///..... */
   
   @media (max-width: 501px) {

@@ -20,6 +20,8 @@ public class Security {
     private float facevalue;
     private String status;
 
+    private int assignee;
+
     public Security() {
     }
 
@@ -33,6 +35,7 @@ public class Security {
         this.type = type;
         this.facevalue = facevalue;
         this.status = status;
+        this.assignee = assignee;
     }
 
     public int getId() {
@@ -105,5 +108,13 @@ public class Security {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(int assignee) {
+        this.assignee = assignee;
     }
 }

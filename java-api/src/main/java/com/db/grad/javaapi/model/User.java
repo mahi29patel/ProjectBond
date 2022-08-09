@@ -28,7 +28,7 @@ public class User {
     }
 
     @Id
-    public long getId() {
+    public int getId() {
         return id;
     }
     public void setId(int id) {

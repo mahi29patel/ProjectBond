@@ -35,7 +35,8 @@ CREATE TABLE security (
                        Coupon INT NOT NULL,
                        Type Varchar(30) NOT NULL,
                        FaceValue DECIMAL(7,2)  NOT NULL,
-                       Status Varchar(20) NOT NULL
+                       Status Varchar(20) NOT NULL,
+                       Assignee INT
 );
 
 
