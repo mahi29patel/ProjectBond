@@ -21,7 +21,7 @@ import { ButtonAppBar } from '../header/header';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import * as moment from 'moment';
 
 import { FormGroup, FormControl, InputLabel, Input, styled} from '@mui/material'
 import Box from '@mui/material/Box';
@@ -44,26 +44,24 @@ const style = {
 export const Trade = (props) => {
 
   const [empList,setEmpList]=useState([]);
-
-  const [security, setSecurity] = useState(null);
-  const [securityDialog, setSecurityDialog] = useState(false);
-  const [deleteSecurityDialog, setDeleteSecurityDialog] = useState(false);
-
+  const [edit, setEdit] = useState(null);
+  const [trade, setTrade] = useState(null);
+  const [securityDialog, setTradeDialog] = useState(false);
+  const user = JSON.parse(localStorage.getItem('user'));
  const [filteredData,setFilteredData]=useState([]);
  const { id } = useParams();
- console.log(id);
   useEffect(() => {
    
     axios.get(`http://localhost:8080/dashboard/${id}/trades`).then(
       res => {
         const temp= [];
           res.data.map((datas) => {
+              datas.settlementdate = moment(datas.settlementdate).format(moment.HTML5_FMT.DATE);
+              datas.tradedate = moment(datas.tradedate).format(moment.HTML5_FMT.DATE);
               temp.push(datas);
           });
           setEmpList(temp);
-          console.log("result", empList);
           setFilteredData(empList);
-          console.log(filteredData);
       } 
   )
   },[]);
@@ -94,8 +92,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
   },[year])
 
   const handleClose=()=> {
-    setSecurityDialog(false);
-    setDeleteSecurityDialog(false);
+    setTradeDialog(false);
   }
   const Container = styled(FormGroup)`
     width: 60%;
@@ -104,6 +101,57 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
         margin-top: 15px;
 `;
 
+  const addTrade = (e) => {
+    e.preventDefault();
+    var tradeObj = {
+      id : e.target.id.value,
+      bookid : e.target.bookid.value,
+      securityid : e.target.securityid.value,
+      quantity : e.target.quantity.value,
+      status : e.target.status.value,
+      price : e.target.price.value,
+      buySell : e.target.bs.value,
+      tradedate : e.target.tradedate.value,
+      settlementdate : e.target.settlementdate.value
+    }
+    setTrade(tradeObj);
+    if(edit==true)
+    {
+      axios.put(`http://localhost:8080/dashboard/trade/${tradeObj.id}`, tradeObj ).then(
+        res => {
+          if(res.data)
+          {
+            setTradeDialog(false);
+            setEdit(false);
+            window.location.reload();
+          }
+        }
+      )
+    }
+    else {
+      axios.post('http://localhost:8080/dashboard/trade', trade).then(
+        res => {
+          if(res.data)
+          {
+            setTradeDialog(false);
+            window.location.reload();
+          }
+        }
+      )
+    }
+  }
+
+  const fetchTradeData = (id) => {
+    axios.get(`http://localhost:8080/dashboard/trade/${id}`).then(
+      res => {
+        var obj = res.data;
+        obj.tradedate = moment(obj.tradedate).format(moment.HTML5_FMT.DATE); // 2019-11-08
+        obj.settlementdate = moment(obj.settlementdate).format(moment.HTML5_FMT.DATE); // 2019-11-08
+        setTrade(obj);
+        setTradeDialog(true);
+      }
+    )
+  }
 
   return (
      
@@ -151,29 +199,22 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
             icon: AddIcon,
             tooltip: "Add",
             position: "toolbar",
+            disabled: user.role != "Admin",
             onClick: () => {
-              setSecurityDialog(true);
+              setTrade(null);
+              setTradeDialog(true);
             }
           },
           {
             icon: EditIcon,
             tooltip: 'Edit',
             position: 'row',
+            disabled: user.role != "Admin",
             onClick: (event, rowData) => {
-              setSecurityDialog(true);
+              setEdit(true);
+              fetchTradeData(rowData.id);
             }
-          },
-          {
-            icon: DeleteIcon,
-            tooltip: 'Delete User',
-            position: 'row',
-            onClick: (event, rowData) => {
-              setSecurity(rowData);
-              // console.log(rowData);
-              setDeleteSecurityDialog(true);
-            }
-          }
-          
+          }          
         ]}
        />
       
@@ -184,67 +225,58 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
         aria-describedby="modal-modal-description"
         >
 
-        {/* TODO: CREATE A APPROPRIATE FORM WITHIN THIS MODAL WHICH WILL BE USED IN ADD AND EDIT ACTION */}
         <Box sx={style} style={{width:'40%'}}>
           <Container>
         <Typography variant="h5">Security Details</Typography>
+          <form onSubmit={addTrade}>  
             <FormControl>
                 <InputLabel htmlFor="my-input">ID</InputLabel>
-                <Input name='id' id="my-input" />
+                <Input name='id' id="my-input" required value={trade ? trade.id : null} />
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">BookID</InputLabel>
-                <Input name='bookid' id="my-input" /> 
+                <Input name='bookid' id="my-input" required defaultValue={trade ? trade.bookid : null} /> 
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">SecurityID</InputLabel>
-                <Input name='securityid' id="my-input"/>
+                <Input name='securityid' id="my-input" required defaultValue={trade ? trade.securityid : null}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Quantity</InputLabel>
-                <Input name='quantity' id="my-input" />
+                <Input name='quantity' id="my-input" required defaultValue={trade ? trade.quantity : null} />
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Status</InputLabel>
-                <Input name='status' id="my-input" />
+                <Input name='status' id="my-input" required defaultValue={trade ? trade.status : null} />
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Price</InputLabel>
-                <Input name='price' id="my-input" />
+                <Input name='price' id="my-input" required defaultValue={trade ? trade.price : null} />
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Buy_Sell</InputLabel>
-                <Input name='bs' id="my-input" />
+                <Input name='bs' id="my-input" required defaultValue={trade ? trade.buySell : null} />
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Trade Date</InputLabel>
-                <Input name='tradedate' id="my-input" />
+                <Input name='tradedate' id="my-input" type='date' required defaultValue={trade ? trade.tradedate : null}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Settlement Date</InputLabel>
-                <Input name='facevalue' id="my-input" />
+                <Input name='settlementdate' id="my-input" type='date' required defaultValue={trade ? trade.settlementdate : null}/>
             </FormControl>
            
-            <FormControl>
+            {/* <FormControl>
                 <Button variant="contained" color="primary" style={{backgroundColor: 'black',color:'white',
                   fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'10px 0px'}}>Submit</Button>
+            </FormControl> */}
+            <FormControl>
+              <Input type="submit"></Input>
             </FormControl>
+          </form>
             </Container>
         </Box>
-      </Modal>
-
-      <Modal open={deleteSecurityDialog} onClose={handleClose} sx={style}>
-        <div className="confirmation-content" style={{backgroundColor:'none'}}>
-          <i className="pi pi-exclamation-triangle" style={{ fontSize: '2rem'}} />
-            {security && <span>Are you sure you want to delete <b>{security.id}</b>?</span>}
-            <FormControl>
-                <Button variant="contained" color="primary" style={{backgroundColor: '#ddeff4',color:'red',
-                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'60px 0px'}}>DELETE</Button>
-            </FormControl>
-        </div>
-      </Modal>
-
-      
+      </Modal>     
     </div>
 
     

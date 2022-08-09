@@ -14,7 +14,7 @@ INSERT INTO book VALUES (13, 'book13');
 INSERT INTO book VALUES (14, 'book14');
 INSERT INTO book VALUES (15, 'book15');
 
-INSERT INTO users VALUES (101,'Riya', 'riya12@gmail.com','1234','FICOps');
+INSERT INTO users VALUES (101,'Riya', 'riya12@gmail.com','1234','Admin');
 INSERT INTO users VALUES (102, 'Mahi', 'mahi29@gmail.com','1234','FICTest');
 INSERT INTO users VALUES (103, 'Khushi', 'khushi32@gmail.com','1234','FICOps');
 INSERT INTO users VALUES (104, 'Prerna', 'prerna234@gmail.com','1234', 'FITest');

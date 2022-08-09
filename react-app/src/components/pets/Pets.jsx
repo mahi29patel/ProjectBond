@@ -24,6 +24,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import * as moment from 'moment'; 
 
 const style = {
   position: 'absolute',
@@ -43,10 +44,11 @@ export const Pets = () => {
 
   const [empList,setEmpList]=useState([]);
 
+  const [edit, setEdit] = useState(false);
   const [security, setSecurity] = useState(null);
   const [securityDialog, setSecurityDialog] = useState(false);
   const [deleteSecurityDialog, setDeleteSecurityDialog] = useState(false);
-  
+  const user = JSON.parse(localStorage.getItem("user"));
  const [filteredData,setFilteredData]=useState([]);
   useEffect(() => {
     
@@ -54,6 +56,7 @@ export const Pets = () => {
       res => {
         const temp= [];
           res.data.map((datas) => {
+            datas.maturitydate = moment(datas.maturitydate).format(moment.HTML5_FMT.DATE);
               temp.push(datas);
           });
           setEmpList(temp);
@@ -96,6 +99,63 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
         margin-top: 15px;
 `;
 
+  const addSecurity = (e) => {
+    e.preventDefault();
+    var securityObj = {
+      id : e.target.id.value,
+      isin : e.target.isin.value,
+      cusip : e.target.cusip.value,
+      issuer : e.target.issuer.value,
+      maturitydate : e.target.maturitydate.value,
+      coupon : e.target.coupon.value,
+      type : e.target.type.value,
+      facevalue : e.target.facevalue.value,
+      status : e.target.status.value,
+      assignee : e.target.assignee.value
+    }
+    setSecurity(securityObj);
+    if(edit == true)
+    {
+      axios.put(`http://localhost:8080/dashboard/security/${securityObj.id}`, securityObj).then(
+        res => {
+          if(res.data)
+          {
+            setSecurityDialog(false);
+            setEdit(false);
+          }
+        }
+      )
+    }
+    else {
+      axios.post('http://localhost:8080/dashboard/security', securityObj).then(
+        res => {
+          if(res.data)
+          {
+            setSecurityDialog(false);
+            window.location.reload();
+          }
+        }
+      )
+    }
+  }
+
+  const fetchSecurityData = (id) => {
+    axios.get(`http://localhost:8080/dashboard/security/${id}`).then(
+      res => {
+        var obj = res.data;
+        obj.maturitydate = moment(obj.maturitydate).format(moment.HTML5_FMT.DATE); // 2019-11-08
+        setSecurity(obj);
+        setSecurityDialog(true);
+      }
+    )
+  }
+
+  const deleteSecurity = () => {
+    axios.delete(`http://localhost:8080/dashboard/security/${security.id}`).then(
+      res => {
+        setDeleteSecurityDialog(false);
+      })
+  }
 
   return (
     <div className="Pets">
@@ -135,7 +195,9 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
             icon: AddIcon,
             tooltip: "Add",
             position: "toolbar",
+            disabled: user.role != "Admin",
             onClick: () => {
+              setSecurity(null);
               setSecurityDialog(true);
             }
           },
@@ -143,17 +205,19 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
             icon: EditIcon,
             tooltip: 'Edit',
             position: 'row',
+            disabled: user.role != "Admin",
             onClick: (event, rowData) => {
-              setSecurityDialog(true);
+              setEdit(true);
+              fetchSecurityData(rowData.id);
             }
           },
           {
             icon: DeleteIcon,
             tooltip: 'Delete User',
             position: 'row',
+            disabled: user.role != "Admin",
             onClick: (event, rowData) => {
               setSecurity(rowData);
-              console.log(rowData);
               setDeleteSecurityDialog(true);
             }
           }
@@ -169,54 +233,58 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
         aria-describedby="modal-modal-description"
         >
 
-        {/* TODO: CREATE A APPROPRIATE FORM WITHIN THIS MODAL WHICH WILL BE USED IN ADD AND EDIT ACTION */}
         <Box sx={style} style={{width:'40%'}}>
           <Container>
-        <Typography variant="h5">Security Details</Typography>
+          <Typography variant="h5">Security Details</Typography>
+          <form onSubmit={addSecurity}>
             <FormControl>
                 <InputLabel htmlFor="my-input">ID</InputLabel>
-                <Input name='id' id="my-input" />
+                <Input name='id' id="my-input" required value={security ? security.id : ''}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">ISIN</InputLabel>
-                <Input name='isin' id="my-input" /> 
+                <Input name='isin' id="my-input" required defaultValue={security ? security.isin : null}/> 
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">CUSIP</InputLabel>
-                <Input name='cusip' id="my-input"/>
+                <Input name='cusip' id="my-input" required defaultValue={security ? security.cusip: ''}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Issuer</InputLabel>
-                <Input name='issuer' id="my-input" />
+                <Input name='issuer' id="my-input" required defaultValue={security ? security.issuer: ''} />
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Maturity Date</InputLabel>
-                <Input name='maturitydate' id="my-input" />
+                <Input name='maturitydate' id="my-input" type='date' required defaultValue={security ? security.maturitydate : null}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Coupon</InputLabel>
-                <Input name='coupon' id="my-input" />
+                <Input name='coupon' id="my-input" required defaultValue={security ? security.coupon : null}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Type</InputLabel>
-                <Input name='type' id="my-input" />
+                <Input name='type' id="my-input" required defaultValue={security ? security.type : null} />
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Face Value</InputLabel>
-                <Input name='facevalue' id="my-input" />
+                <Input name='facevalue' id="my-input" required defaultValue={security ? security.facevalue : null}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Status</InputLabel>
-                <Input name='facevalue' id="my-input" />
+                <Input name='status' id="my-input" required defaultValue={security ? security.status : null}/>
             </FormControl>
             <FormControl>
                 <InputLabel htmlFor="my-input">Assignee</InputLabel>
-                <Input name='assignee' id="my-input" />
+                <Input name='assignee' id="my-input" required defaultValue={security ? security.assignee : null}/>
             </FormControl>
-            <FormControl>
+            {/* <FormControl>
                 <Button variant="contained" color="primary" style={{backgroundColor: 'black',color:'white',
-                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'10px 0px'}}>Submit</Button>
+                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'10px 0px'}} onClick={addSecurity}>Submit</Button>
+            </FormControl> */}
+            <FormControl>
+              <Input type="submit"></Input>
             </FormControl>
+            </form>
             </Container>
         </Box>
       </Modal>
@@ -227,7 +295,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
             {security && <span>Are you sure you want to delete <b>{security.id}</b>?</span>}
             <FormControl>
                 <Button variant="contained" color="primary" style={{backgroundColor: '#ddeff4',color:'red',
-                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'60px 0px'}}>DELETE</Button>
+                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'60px 0px'}} onClick={deleteSecurity}>DELETE</Button>
             </FormControl>
         </div>
       </Modal>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class SecurityController {
@@ -23,6 +24,13 @@ public class SecurityController {
     @CrossOrigin(origins = "http://localhost:3000")
     public List<Security> getAllBonds() {
         return securityRepository.findAll();
+    }
+
+    //get security by id
+    @GetMapping("/dashboard/security/{securityid}")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public Optional<Security> getSecurityById(@PathVariable Integer securityid) {
+        return securityRepository.findById((securityid));
     }
 
     //add new security

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './loginStyle.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { alignCenter } from 'fontawesome';
 
 export const Login = () => {
 
@@ -11,6 +12,9 @@ export const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
@@ -23,16 +27,20 @@ export const Login = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const userobj = {email : event.target.email.value, password: event.target.password.value};
+        setError();
+        setLoading(true);
         axios.post("http://localhost:8080/login", userobj)
         .then(response => {
             if(response.data == '')
             {
-                console.log("Invalid Credentials");
+                setLoading(false);
+                setError("Invalid Credentials");
+                console.log(error);
             }
             else {
+                setLoading(false);
                 localStorage.setItem('user', JSON.stringify(response.data));
                 navigate('dashboard/securities');
-                console.log(response.data);
             }
         });
     }
@@ -45,6 +53,8 @@ export const Login = () => {
                 <input type="email" value={username} onChange={handleUsernameChange} name="email" id="email" required />
                 <label>Password</label>
                 <input type="password" value={password} onChange={handlePasswordChange}  name="password" id="password" required />
+                {error && <span style={{color:"red", textAlign:"center"}}>{error}</span>}
+                {loading && <span style={{textAlign:"center", color:"blue"}}>Logging you in...</span>}
                 <input type="submit"></input>            
             </form>
         </div>
