@@ -14,17 +14,41 @@ import { useParams } from 'react-router-dom';
 import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+import { ButtonAppBar } from '../header/header';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
+import { FormGroup, FormControl, InputLabel, Input, styled} from '@mui/material'
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 
-
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 export const Trade = (props) => {
 
   const [empList,setEmpList]=useState([]);
-  // const [filteredData,setFilteredData] = useState(false);
-  
+
+  const [security, setSecurity] = useState(null);
+  const [securityDialog, setSecurityDialog] = useState(false);
+  const [deleteSecurityDialog, setDeleteSecurityDialog] = useState(false);
+
  const [filteredData,setFilteredData]=useState([]);
  const { id } = useParams();
  console.log(id);
@@ -69,7 +93,17 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
 
   },[year])
 
-  
+  const handleClose=()=> {
+    setSecurityDialog(false);
+    setDeleteSecurityDialog(false);
+  }
+  const Container = styled(FormGroup)`
+    width: 60%;
+    margin: 5% 0 0 20%;
+    & > div {
+        margin-top: 15px;
+`;
+
 
   return (
      
@@ -77,6 +111,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
 
 
      <div className="Pets">
+        <ButtonAppBar/>
       <h1 align="center">List of Trades of Bond : {id}</h1>
      
     
@@ -99,7 +134,8 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
         data={empList}
         columns={columns}
         options={{
-          filtering:filter
+          filtering:filter,
+          actionsColumnIndex: -1
         }}
         actions={[
           {
@@ -110,12 +146,103 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
           />,
           tooltip:"Hide/Show Filter option",
           isFreeAction:true
+          },
+          {
+            icon: AddIcon,
+            tooltip: "Add",
+            position: "toolbar",
+            onClick: () => {
+              setSecurityDialog(true);
+            }
+          },
+          {
+            icon: EditIcon,
+            tooltip: 'Edit',
+            position: 'row',
+            onClick: (event, rowData) => {
+              setSecurityDialog(true);
+            }
+          },
+          {
+            icon: DeleteIcon,
+            tooltip: 'Delete User',
+            position: 'row',
+            onClick: (event, rowData) => {
+              setSecurity(rowData);
+              // console.log(rowData);
+              setDeleteSecurityDialog(true);
+            }
           }
           
         ]}
        />
       
-       
+      <Modal
+        open={securityDialog}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        >
+
+        {/* TODO: CREATE A APPROPRIATE FORM WITHIN THIS MODAL WHICH WILL BE USED IN ADD AND EDIT ACTION */}
+        <Box sx={style} style={{width:'40%'}}>
+          <Container>
+        <Typography variant="h5">Security Details</Typography>
+            <FormControl>
+                <InputLabel htmlFor="my-input">ID</InputLabel>
+                <Input name='id' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">BookID</InputLabel>
+                <Input name='bookid' id="my-input" /> 
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">SecurityID</InputLabel>
+                <Input name='securityid' id="my-input"/>
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Quantity</InputLabel>
+                <Input name='quantity' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Status</InputLabel>
+                <Input name='status' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Price</InputLabel>
+                <Input name='price' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Buy_Sell</InputLabel>
+                <Input name='bs' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Trade Date</InputLabel>
+                <Input name='tradedate' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Settlement Date</InputLabel>
+                <Input name='facevalue' id="my-input" />
+            </FormControl>
+           
+            <FormControl>
+                <Button variant="contained" color="primary" style={{backgroundColor: 'black',color:'white',
+                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'10px 0px'}}>Submit</Button>
+            </FormControl>
+            </Container>
+        </Box>
+      </Modal>
+
+      <Modal open={deleteSecurityDialog} onClose={handleClose} sx={style}>
+        <div className="confirmation-content" style={{backgroundColor:'none'}}>
+          <i className="pi pi-exclamation-triangle" style={{ fontSize: '2rem'}} />
+            {security && <span>Are you sure you want to delete <b>{security.id}</b>?</span>}
+            <FormControl>
+                <Button variant="contained" color="primary" style={{backgroundColor: '#ddeff4',color:'red',
+                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'60px 0px'}}>DELETE</Button>
+            </FormControl>
+        </div>
+      </Modal>
 
       
     </div>

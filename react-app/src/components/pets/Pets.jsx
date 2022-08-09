@@ -18,7 +18,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Check from '@material-ui/icons/Check'
 import FilterList from '@material-ui/icons/FilterList'
 import Remove from '@material-ui/icons/Remove'
-
+import { FormGroup, FormControl, InputLabel, Input, styled} from '@mui/material'
 import { ButtonAppBar } from '../header/header'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -89,8 +89,13 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
     setSecurityDialog(false);
     setDeleteSecurityDialog(false);
   }
+  const Container = styled(FormGroup)`
+    width: 60%;
+    margin: 5% 0 0 20%;
+    & > div {
+        margin-top: 15px;
+`;
 
-  
 
   return (
     <div className="Pets">
@@ -155,6 +160,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
           
         ]}
        />
+       
 
       <Modal
         open={securityDialog}
@@ -164,20 +170,65 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
         >
 
         {/* TODO: CREATE A APPROPRIATE FORM WITHIN THIS MODAL WHICH WILL BE USED IN ADD AND EDIT ACTION */}
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+        <Box sx={style} style={{width:'40%'}}>
+          <Container>
+        <Typography variant="h5">Security Details</Typography>
+            <FormControl>
+                <InputLabel htmlFor="my-input">ID</InputLabel>
+                <Input name='id' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">ISIN</InputLabel>
+                <Input name='isin' id="my-input" /> 
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">CUSIP</InputLabel>
+                <Input name='cusip' id="my-input"/>
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Issuer</InputLabel>
+                <Input name='issuer' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Maturity Date</InputLabel>
+                <Input name='maturitydate' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Coupon</InputLabel>
+                <Input name='coupon' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Type</InputLabel>
+                <Input name='type' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Face Value</InputLabel>
+                <Input name='facevalue' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Status</InputLabel>
+                <Input name='facevalue' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <InputLabel htmlFor="my-input">Assignee</InputLabel>
+                <Input name='assignee' id="my-input" />
+            </FormControl>
+            <FormControl>
+                <Button variant="contained" color="primary" style={{backgroundColor: 'black',color:'white',
+                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'10px 0px'}}>Submit</Button>
+            </FormControl>
+            </Container>
         </Box>
       </Modal>
 
       <Modal open={deleteSecurityDialog} onClose={handleClose} sx={style}>
-        <div className="confirmation-content">
-          <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem'}} />
+        <div className="confirmation-content" style={{backgroundColor:'none'}}>
+          <i className="pi pi-exclamation-triangle" style={{ fontSize: '2rem'}} />
             {security && <span>Are you sure you want to delete <b>{security.id}</b>?</span>}
+            <FormControl>
+                <Button variant="contained" color="primary" style={{backgroundColor: '#ddeff4',color:'red',
+                  fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'60px 0px'}}>DELETE</Button>
+            </FormControl>
         </div>
       </Modal>
     </div>
