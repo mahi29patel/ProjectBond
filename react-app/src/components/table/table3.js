@@ -74,7 +74,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
 
 
      <div className="Pets">
-      <h2 align="center" style={{marginBottom:'40px'}}>List of Books of {user1.id} </h2>
+      <h2 align="center" style={{marginBottom:'40px'}}>List of Books </h2>
      
     
 

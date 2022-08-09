@@ -31,7 +31,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 500,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -93,10 +93,11 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
     setDeleteSecurityDialog(false);
   }
   const Container = styled(FormGroup)`
-    width: 60%;
-    margin: 5% 0 0 20%;
+    width: 30px;
+    margin: 5% 0 5% 20%;
     & > div {
         margin-top: 15px;
+        
 `;
 
   const addSecurity = (e) => {
@@ -282,7 +283,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
                   fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'10px 0px'}} onClick={addSecurity}>Submit</Button>
             </FormControl> */}
             <FormControl>
-              <Input type="submit"></Input>
+              <input type="submit"></input>
             </FormControl>
             </form>
             </Container>

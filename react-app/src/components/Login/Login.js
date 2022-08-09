@@ -53,8 +53,8 @@ export const Login = () => {
                 <input type="email" value={username} onChange={handleUsernameChange} name="email" id="email" required />
                 <label>Password</label>
                 <input type="password" value={password} onChange={handlePasswordChange}  name="password" id="password" required />
-                {error && <span style={{color:"red", textAlign:"center"}}>{error}</span>}
-                {loading && <span style={{textAlign:"center", color:"blue"}}>Logging you in...</span>}
+                {error && <span style={{color:"yellow", textAlign:"center"}}>{error}</span>}
+                {loading && <span style={{textAlign:"center", color:"white"}}>Logging you in...</span>}
                 <input type="submit"></input>            
             </form>
         </div>

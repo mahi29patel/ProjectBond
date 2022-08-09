@@ -74,7 +74,7 @@ export const Trade = (props) => {
     { title: "ID", field: "id"},
     { title: "SecurityID", field: "securityid" },
     { title: "Book Name", field: "book.bookname" },
-    { title: "UserID", field: "userid" },
+    
     {title: "Quantity", field:"quantity"},
     {title: "Price", field:"price"},
     {title: "Settlement Date", field:"settlementdate"},
@@ -95,10 +95,10 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
     setTradeDialog(false);
   }
   const Container = styled(FormGroup)`
-    width: 60%;
-    margin: 5% 0 0 20%;
+    width: 50%;
+    margin: 5% 0 0 25%;
     & > div {
-        margin-top: 15px;
+        margin-top: 25px;
 `;
 
   const addTrade = (e) => {
@@ -271,7 +271,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
                   fontSize: '20px', padding: '10px 60px', borderRadius:'5px', margin:'10px 0px'}}>Submit</Button>
             </FormControl> */}
             <FormControl>
-              <Input type="submit"></Input>
+              <input type="submit"></input>
             </FormControl>
           </form>
             </Container>
