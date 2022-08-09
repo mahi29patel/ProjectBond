@@ -20,7 +20,7 @@ import Remove from '@material-ui/icons/Remove'
 
 
 
-export const TableProfile1 = (props) => {
+export const TableProfile4 = (props) => {
 
   const [empList,setEmpList]=useState([]);
   
@@ -52,14 +52,15 @@ export const TableProfile1 = (props) => {
   const columns = [
     { title: "ID", field: "id"},
     { title: "SecurityID", field: "securityid" },
-    {title: "Quantity", field:"quantity"},
-    {title: "Price", field:"price"},
-    {title: "Settlement Date", field:"settlementdate"},
-    {title: "Trade Date", field:"tradedate"},
+    {title: "BookID", field:"book.id"},
+    {title: "Maturity Date", field:"security.maturitydate"},
+    {title:"Status", field:"security.status"}
+   
     
   ]
-  //"id":1,"bookid":1,"securityid":1001,"bookname":"book1","userid":102,"quantity":2,"status":"Active",
-  //"price":560.7,"buySell":1,"tradedate":"2022-08-07T18:30:00.000+00:00","settlementdate":"2022-08-07T18:30:00.000+00:00"
+ // ,"book":{"id":2,"bookname":"book2"},
+ //"security":{"id":1003,"isin":2037,"cusip":303,"issuer":"Tata","maturitydate":"2022-08-07T18:30:00.000+00:00",
+ //"coupon":10,"type":"Savings","facevalue":1000.0,"status":"Matured","assignee":101}}]
   const handleChange=()=>{
    setFilter(!filter)
   }
@@ -76,12 +77,12 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
 
 
      <div className="Pets">
-      <h2 align="center" style={{marginBottom:'40px'}}>List of Trades of {user1.id}</h2>
+      <h2 align="center" style={{marginBottom:'40px'}}>List of Active Trades</h2>
      
     
 
-     
-     <MaterialTable
+     { (user1.id === 101 || user1.id=== 104 || user1.id === 106 || user1.id === 109) ?
+     (<MaterialTable
       icons={{ 
         Check: Check,
             DetailPanel: ChevronRight,
@@ -98,8 +99,9 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
         data={empList}
         columns={columns}
         
-       />
-      
+       />)
+       :<h2>No data displayed</h2>
+    }
        
 
       
@@ -110,4 +112,4 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
   );
 }
 
-export default TableProfile1;
+export default TableProfile4;

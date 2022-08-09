@@ -75,7 +75,7 @@ export const Trade = (props) => {
   const columns = [
     { title: "ID", field: "id"},
     { title: "SecurityID", field: "securityid" },
-    { title: "Book Name", field: "bookname" },
+    { title: "Book Name", field: "book.bookname" },
     { title: "UserID", field: "userid" },
     {title: "Quantity", field:"quantity"},
     {title: "Price", field:"price"},

@@ -50,7 +50,7 @@ INSERT INTO BookUser VALUES (14, 105);
 
 INSERT INTO security VALUES (1001, 2017, 301, 'Honda', '2022-08-08',10,'Savings',1000,'Active',101);
 INSERT INTO security VALUES (1002, 2027, 302, 'Toyota', '2022-08-09',10,'Savings',1000,'Active',104);
-INSERT INTO security VALUES (1003, 2037, 303, 'Tata', '2022-08-08',10,'Savings',1000,'Matured',101);
+INSERT INTO security VALUES (1003, 2037, 303, 'Tata', '2022-08-08',10,'Savings',1000,'Active',101);
 INSERT INTO security VALUES (1004, 2047, 304, 'Godrej', '2022-08-09',10,'Savings',1000,'Matured',108);
 INSERT INTO security VALUES (1005, 2057, 305, 'ITC', '2022-08-07',10,'Savings',1000,'Matured',102);
 INSERT INTO security VALUES (1006, 2067, 306, 'Unilever', '2022-08-06',10,'Savings',1000,'Active',103);
