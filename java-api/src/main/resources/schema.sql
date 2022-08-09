@@ -52,7 +52,7 @@ CREATE TABLE trade (
                        SettlementDate DATE NOT NULL,
 
                     foreign key (BookId) references book(Id),
-                    foreign key (SecurityId) references security(Id)
+                    foreign key (SecurityId) references security(Id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS BookUser;

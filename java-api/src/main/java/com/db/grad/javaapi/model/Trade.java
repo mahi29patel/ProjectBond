@@ -1,7 +1,7 @@
 package com.db.grad.javaapi.model;
 
-import com.db.grad.javaapi.model.Books;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,8 +14,6 @@ public class Trade {
     private int id;
     private int bookid;
     private int securityid;
-    private String bookname;
-    private int userid;
     private int quantity;
     private String status;
     private float price;
@@ -24,12 +22,14 @@ public class Trade {
     private Date settlementdate;
 
     @JsonBackReference
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="bookid", insertable = false, updatable = false)
     private Books book;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="securityid", insertable = false, updatable = false)
     private Security security;
 
@@ -121,14 +121,6 @@ public class Trade {
     public void setSettlementdate(Date settlementdate) {
         this.settlementdate = settlementdate;
     }
-
-    public String getBookname() { return bookname; }
-
-    public void setBookname(String bookname) { this.bookname = bookname; }
-
-    public int getUserid() { return userid; }
-
-    public void setUserid(int userid) { this.userid = userid; }
 
     public Books getBook() {
         return book;
