@@ -27,11 +27,11 @@ export const TableProfile = (props) => {
   
  const [filteredData,setFilteredData]=useState([]);
  const user1 = JSON.parse(localStorage.getItem('user'));
- const { id } = user1.id;
- console.log(id);
+ 
+ console.log(user1);
   useEffect(() => {
    
-    axios.get(`http://localhost:8080/profile/${id}/trades`).then(
+    axios.get(`http://localhost:8080/profile/${user1.id}/trades`).then(
       res => {
         const temp= [];
           res.data.map((datas) => {
@@ -78,7 +78,7 @@ setFilteredData(year==='all'?empList:empList.filter(dt=>dt.year===year))
 
 
      <div className="Pets">
-      <h1 align="center">List of Trades of Bond : {id}</h1>
+      <h1 align="center">List of Trades of Bond : {user1.id}</h1>
      
     
 
