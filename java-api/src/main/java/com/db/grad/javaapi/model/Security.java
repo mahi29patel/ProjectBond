@@ -25,7 +25,7 @@ public class Security {
     public Security() {
     }
 
-    public Security(int id, int isin, int cusip, String issuer, Date maturitydate, int coupon, String type, float facevalue, String status, List<Trade> trades) {
+    public Security(int id, int isin, int cusip, String issuer, Date maturitydate, int coupon, String type, float facevalue, String status, int assignee) {
         this.id = id;
         this.isin = isin;
         this.cusip = cusip;
